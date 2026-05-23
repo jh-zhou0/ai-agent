@@ -12,6 +12,7 @@ import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.stereotype.Component;
 import org.zjh.aiagent.advisor.MyLoggerAdvisor;
+import org.zjh.aiagent.chatmemory.FileBasedChatMemoryRepository;
 
 import java.util.List;
 
@@ -35,8 +36,12 @@ public class LoveApp {
     public LoveApp(ChatModel dashScopeChatModel) {
         // 初始化基于内存的对话记忆
         ChatMemoryRepository chatMemoryRepository = new InMemoryChatMemoryRepository();
+        // 初始化基于文件的对话记忆
+        String dir = System.getProperty("user.dir") + "/chat-memory";
+        FileBasedChatMemoryRepository fileBasedChatMemoryRepository = new FileBasedChatMemoryRepository(dir);
         ChatMemory chatMemory = MessageWindowChatMemory.builder()
-                .chatMemoryRepository(chatMemoryRepository)
+//                .chatMemoryRepository(chatMemoryRepository)
+                .chatMemoryRepository(fileBasedChatMemoryRepository)
                 .maxMessages(10)
                 .build();
         Advisor messageChatMemoryAdvisor = MessageChatMemoryAdvisor.builder(chatMemory).build();
