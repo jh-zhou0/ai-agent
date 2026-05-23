@@ -8,13 +8,20 @@ import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.ChatMemoryRepository;
 import org.springframework.ai.chat.memory.InMemoryChatMemoryRepository;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
+import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.chat.prompt.SystemPromptTemplate;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.zjh.aiagent.advisor.MyLoggerAdvisor;
 import org.zjh.aiagent.chatmemory.FileBasedChatMemoryRepository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author kayson
@@ -23,6 +30,9 @@ import java.util.List;
 @Component
 @Slf4j
 public class LoveApp {
+
+    @Value("classpath:/prompts/system-message.st")
+    private Resource systemResource;
 
     private final ChatClient chatClient;
 
@@ -40,8 +50,8 @@ public class LoveApp {
         String dir = System.getProperty("user.dir") + "/chat-memory";
         FileBasedChatMemoryRepository fileBasedChatMemoryRepository = new FileBasedChatMemoryRepository(dir);
         ChatMemory chatMemory = MessageWindowChatMemory.builder()
-//                .chatMemoryRepository(chatMemoryRepository)
-                .chatMemoryRepository(fileBasedChatMemoryRepository)
+                .chatMemoryRepository(chatMemoryRepository)
+//                .chatMemoryRepository(fileBasedChatMemoryRepository)
                 .maxMessages(10)
                 .build();
         Advisor messageChatMemoryAdvisor = MessageChatMemoryAdvisor.builder(chatMemory).build();
@@ -82,6 +92,25 @@ public class LoveApp {
                 .prompt()
                 .user(message)
                 .system(SYSTEM_PROMPT + JSON_PROMPT)
+                .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, chatId))
+                .call()
+                .entity(LoveReport.class);
+    }
+
+    /**
+     * AI恋爱报告功能（支持结构化输出）
+     *
+     * @param message message
+     * @param chatId chatId
+     * @return LoveReport
+     */
+    public LoveReport doChatWithReportAndResourceFile(String message, String chatId, String user) {
+        Message userMessage = new UserMessage(message);
+        SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(systemResource);
+        Message sysMessage = systemPromptTemplate.createMessage(Map.of("user", user));
+        Prompt prompt = new Prompt(List.of(sysMessage, userMessage));
+        return this.chatClient
+                .prompt(prompt)
                 .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, chatId))
                 .call()
                 .entity(LoveReport.class);
