@@ -11,6 +11,7 @@ import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.stereotype.Component;
+import org.zjh.aiagent.advisor.MyLoggerAdvisor;
 
 /**
  * @author kayson
@@ -35,10 +36,11 @@ public class LoveApp {
                 .maxMessages(10)
                 .build();
         Advisor messageChatMemoryAdvisor = MessageChatMemoryAdvisor.builder(chatMemory).build();
+        MyLoggerAdvisor myLoggerAdvisor = new MyLoggerAdvisor();
         this.chatClient = ChatClient
                 .builder(dashScopeChatModel)
                 .defaultSystem(SYSTEM_PROMPT)
-                .defaultAdvisors(messageChatMemoryAdvisor)
+                .defaultAdvisors(messageChatMemoryAdvisor, myLoggerAdvisor)
                 .build();
     }
 
@@ -52,8 +54,6 @@ public class LoveApp {
         if (chatResponse == null) {
             return "服务异常";
         }
-        String content = chatResponse.getResult().getOutput().getText();
-        log.info("大模型输出结果：{}", content);
-        return content;
+        return chatResponse.getResult().getOutput().getText();
     }
 }
