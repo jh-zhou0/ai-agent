@@ -69,6 +69,20 @@
             <version>1.15.0-beta25</version>
         </dependency>
 
+        <!--  markdown 读取  -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-markdown-document-reader</artifactId>
+            <version>1.1.6</version>
+        </dependency>
+
+        <!--  向量数据库  -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-advisors-vector-store</artifactId>
+            <version>1.1.6</version>
+        </dependency>
+
         <!--  支持结构化输出  -->
         <dependency>
             <groupId>com.github.victools</groupId>
