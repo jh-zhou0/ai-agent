@@ -35,11 +35,14 @@ public class LoveAppDocumentLoader {
             for (Resource resource : resources) {
                 String filename = resource.getFilename();
                 assert filename != null;
+                String status = filename.substring(filename.length() - 6, filename.length() - 4);
                 MarkdownDocumentReaderConfig config = MarkdownDocumentReaderConfig.builder()
                         .withHorizontalRuleCreateDocument(true)
                         .withIncludeCodeBlock(false)
                         .withIncludeBlockquote(false)
+                        // 添加元数据
                         .withAdditionalMetadata("filename", filename)
+                        .withAdditionalMetadata("status", status)
                         .build();
                 MarkdownDocumentReader reader = new MarkdownDocumentReader(resource, config);
                 allMarkdowns.addAll(reader.get());

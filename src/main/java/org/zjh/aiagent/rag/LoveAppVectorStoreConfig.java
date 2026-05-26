@@ -22,11 +22,15 @@ public class LoveAppVectorStoreConfig {
     @Resource
     private LoveAppDocumentLoader loveAppDocumentLoader;
 
+    @Resource
+    private MyKeywordEnricher myKeywordEnricher;
+
     @Bean
     public VectorStore loveAppVectorStore(EmbeddingModel dashscopeEmbeddingModel) {
         SimpleVectorStore loveAppVectorStore = SimpleVectorStore.builder(dashscopeEmbeddingModel).build();
         List<Document> documentList = loveAppDocumentLoader.loadMarkdowns();
-        loveAppVectorStore.doAdd(documentList);
+        List<Document> enrichedDocuments = myKeywordEnricher.enrichDocuments(documentList);
+        loveAppVectorStore.doAdd(enrichedDocuments);
         return loveAppVectorStore;
     }
 }
