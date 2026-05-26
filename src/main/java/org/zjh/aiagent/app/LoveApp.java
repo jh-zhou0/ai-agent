@@ -147,7 +147,7 @@ public class LoveApp {
 //                .advisors(loveAppRagCloudAdvisor)
                 // 检索增强服务（自定义知识库服务）
                 .advisors(
-                        LoveAppRagCustomAdvisorFactory.createAdvisor(loveAppVectorStore, "已婚")
+                        LoveAppRagCustomAdvisorFactory.createAdvisor(loveAppVectorStore, "哈哈")
                 )
                 .call()
                 .chatResponse();
