@@ -21,6 +21,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.zjh.aiagent.advisor.MyLoggerAdvisor;
 import org.zjh.aiagent.chatmemory.FileBasedChatMemoryRepository;
+import org.zjh.aiagent.rag.QueryRewriter;
 
 import java.util.List;
 import java.util.Map;
@@ -124,6 +125,9 @@ public class LoveApp {
     @jakarta.annotation.Resource
     private Advisor loveAppRagCloudAdvisor;
 
+    @jakarta.annotation.Resource
+    private QueryRewriter queryRewriter;
+
     /**
      * 恋爱知识库问答
      *
@@ -132,9 +136,10 @@ public class LoveApp {
      * @return String
      */
     public String doChatWithRag(String message, String chatId) {
+        String rewriteMsg = queryRewriter.rewrite(message);
         ChatResponse chatResponse = this.chatClient
                 .prompt()
-                .user(message)
+                .user(rewriteMsg)
                 .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, chatId))
                 // 本地知识库
                 .advisors(QuestionAnswerAdvisor.builder(loveAppVectorStore).build())
