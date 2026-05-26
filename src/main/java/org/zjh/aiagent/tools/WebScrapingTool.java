@@ -8,7 +8,7 @@ import org.springframework.ai.tool.annotation.ToolParam;
 import java.io.IOException;
 
 /**
- * 网页爬取 MCP 工具
+ * 网页爬取工具
  */
 public class WebScrapingTool {
 

@@ -9,7 +9,7 @@ import org.zjh.aiagent.constant.FileConstant;
 import java.io.File;
 
 /**
- * 资源下载 MCP 工具
+ * 资源下载工具
  */
 public class ResourceDownloadTool {
 

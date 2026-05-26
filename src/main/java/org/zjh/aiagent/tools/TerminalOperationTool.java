@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * 终端操作 MCP 工具
+ * 终端操作工具
  */
 public class TerminalOperationTool {
 

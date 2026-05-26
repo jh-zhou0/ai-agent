@@ -6,7 +6,7 @@ import org.springframework.ai.tool.annotation.ToolParam;
 import org.zjh.aiagent.constant.FileConstant;
 
 /**
- * 文件操作 MCP 工具
+ * 文件操作工具
  */
 public class FileOperationTool {
 
