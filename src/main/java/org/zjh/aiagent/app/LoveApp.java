@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
-import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.ChatMemoryRepository;
 import org.springframework.ai.chat.memory.InMemoryChatMemoryRepository;
@@ -21,6 +20,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.zjh.aiagent.advisor.MyLoggerAdvisor;
 import org.zjh.aiagent.chatmemory.FileBasedChatMemoryRepository;
+import org.zjh.aiagent.rag.LoveAppRagCustomAdvisorFactory;
 import org.zjh.aiagent.rag.QueryRewriter;
 
 import java.util.List;
@@ -142,9 +142,13 @@ public class LoveApp {
                 .user(rewriteMsg)
                 .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, chatId))
                 // 本地知识库
-                .advisors(QuestionAnswerAdvisor.builder(loveAppVectorStore).build())
+//                .advisors(QuestionAnswerAdvisor.builder(loveAppVectorStore).build())
                 // 检索增强服务（云知识库服务）
 //                .advisors(loveAppRagCloudAdvisor)
+                // 检索增强服务（自定义知识库服务）
+                .advisors(
+                        LoveAppRagCustomAdvisorFactory.createAdvisor(loveAppVectorStore, "已婚")
+                )
                 .call()
                 .chatResponse();
         if (chatResponse == null) {
