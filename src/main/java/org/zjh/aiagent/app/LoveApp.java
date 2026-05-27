@@ -24,6 +24,7 @@ import org.zjh.aiagent.advisor.MyLoggerAdvisor;
 import org.zjh.aiagent.chatmemory.FileBasedChatMemoryRepository;
 import org.zjh.aiagent.rag.LoveAppRagCustomAdvisorFactory;
 import org.zjh.aiagent.rag.QueryRewriter;
+import reactor.core.publisher.Flux;
 
 import java.util.List;
 import java.util.Map;
@@ -79,6 +80,22 @@ public class LoveApp {
             return "服务异常";
         }
         return chatResponse.getResult().getOutput().getText();
+    }
+
+    /**
+     * AI聊天功能（支持流式输出）
+     *
+     * @param message message
+     * @param chatId chatId
+     * @return Flux<String>
+     */
+    public Flux<String> doChatByStream(String message, String chatId) {
+        return this.chatClient
+                .prompt()
+                .user(message)
+                .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, chatId))
+                .stream()
+                .content();
     }
 
     record LoveReport(String title, List<String> suggestions) {
