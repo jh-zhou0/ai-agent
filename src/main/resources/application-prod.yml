@@ -1,0 +1,18 @@
+spring:
+  ai:
+    dashscope:
+      api-key: dashscope-api-key
+      chat:
+        options:
+          model: deepseek-v4-pro
+#    mcp:
+#      client:
+##        stdio:
+##          servers-configuration: classpath:mcp-servers.json
+#        sse:
+#          connections:
+#            server1:
+#              url: http://127.0.0.1:9152
+# 联网搜索
+search-api:
+  api-key: search-api-key

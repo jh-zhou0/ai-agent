@@ -1,8 +1,9 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/spring-projects/spring-boot/master/spring-boot-project/spring-boot-tools/spring-boot-configuration-metadata-json-schema/src/main/resources/schema/spring-configuration-metadata.json
 spring:
   application:
     name: ai-agent
   profiles:
-    active: local
+    active: prod
 server:
   port: 8123
   servlet:
