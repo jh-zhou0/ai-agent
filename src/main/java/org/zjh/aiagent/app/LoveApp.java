@@ -15,6 +15,7 @@ import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
 import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -161,12 +162,16 @@ public class LoveApp {
     @jakarta.annotation.Resource
     private ToolCallback[] allTools;
 
+    @jakarta.annotation.Resource
+    private ToolCallbackProvider toolCallbackProvider;
+
     public String doChatWithTools(String message, String chatId) {
         ChatResponse chatResponse = chatClient
                 .prompt()
                 .user(message)
                 .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, chatId))
-                .toolCallbacks(allTools)
+//                .toolCallbacks(allTools)
+                .toolCallbacks(toolCallbackProvider)
                 .call()
                 .chatResponse();
         if (chatResponse == null) {
