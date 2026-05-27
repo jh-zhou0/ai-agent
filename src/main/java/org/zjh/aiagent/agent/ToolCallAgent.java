@@ -127,13 +127,12 @@ public class ToolCallAgent extends ReActAgent {
                 .collect(Collectors.joining("\n"));
         log.info("工具调用结果：{}", results);
         // 判断是否调用了终止工具
-        toolResponseMessage.getResponses().stream()
-                .filter(response -> "terminate".equals(response.name()))
-                .findAny()
-                .ifPresent(response -> {
-                    log.info("{} 调用了终止工具，结束工作", getName());
-                    setState(AgentState.FINISHED);
-                });
+        boolean terminateToolCall = toolResponseMessage.getResponses().stream()
+                .anyMatch(response -> "terminate".equals(response.name()));
+        if (terminateToolCall) {
+            setState(AgentState.FINISHED);
+            log.info("{} 停止了交互", getName());
+        }
         return results;
     }
 

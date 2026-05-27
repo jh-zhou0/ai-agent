@@ -71,12 +71,13 @@ public abstract class BaseAgent {
                 // 单步执行
                 String stepResult = step();
                 String result = "Step " + currentStep + ": " + stepResult;
+                log.info("Step {} result: {}", currentStep, result);
+                currentStep++;
                 // 检查是否陷入循环
                 if (isStuck()) {
                     handleStuckState();
                 }
                 resultList.add(result);
-                currentStep++;
             }
             // 检查是否超出步骤限制
             if (currentStep >= maxStep) {
@@ -113,7 +114,7 @@ public abstract class BaseAgent {
     protected void handleStuckState() {
         String stuckPrompt = "观察到重复响应。考虑新策略，避免重复已尝试过的无效路径。";
         this.nextStepPrompt = stuckPrompt + "\n" + (this.nextStepPrompt != null ? this.nextStepPrompt : "");
-        System.out.println("Agent detected stuck state. Added prompt: " + stuckPrompt);
+        log.info("Agent detected stuck state. Added prompt: {}", stuckPrompt);
     }
 
     /**
