@@ -3,7 +3,7 @@ spring:
   application:
     name: ai-agent
   profiles:
-    active: prod
+    active: local
 server:
   port: 8123
   servlet:
